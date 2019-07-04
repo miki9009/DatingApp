@@ -21,6 +21,9 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
         {
 
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             userRegisterDto.Username = userRegisterDto.Username.ToLower();
 
             if(await _repository.UserExists(userRegisterDto.Username))
@@ -40,6 +43,23 @@ namespace DatingApp.API.Controllers
         public IActionResult Test()
         {
             return StatusCode(201);
+        }
+
+
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var val = await _repository.GetUsers();
+
+            return Ok(val);
+        }
+
+        [HttpGet("users/{id}")]
+        public async Task<IActionResult> GetUser(int ID)
+        {
+            var val = await _repository.GetUser(ID);
+
+            return Ok(val);
         }
 
     }

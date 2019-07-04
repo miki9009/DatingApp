@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,16 @@ namespace DatingApp.API.Data
         public async Task<bool> UserExists(string username)
         {
             return await _context.Users.AnyAsync(x=> x.UserName == username);
+        }
+
+        public async Task<User> GetUser(int i)
+        {
+            return await _context.Users.SingleOrDefaultAsync(x=>x.Id == i);
+        }
+
+        public async Task<List<User>> GetUsers()
+        {
+            return await _context.Users.ToListAsync();
         }
     }
 }
