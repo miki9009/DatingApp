@@ -1,39 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../_services/auth.service';
-import { AlertifyService } from '../_services/alertify.service';
+import { Component, OnInit } from "@angular/core";
+import { AuthService } from "../_services/auth.service";
+import { AlertifyService } from "../_services/alertify.service";
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  selector: "app-nav",
+  templateUrl: "./nav.component.html",
+  styleUrls: ["./nav.component.css"]
 })
 export class NavComponent implements OnInit {
-
   model: any = {};
 
-  constructor(private authService: AuthService, private alertify: AlertifyService) { }
+  constructor(
+    public authService: AuthService,
+    private alertify: AlertifyService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  login(){
+  login() {
     console.log(this.model);
     this.authService.login(this.model).subscribe(
-      next =>{
-        this.alertify.success('logged in successfuly');
+      next => {
+        this.alertify.success("logged in successfuly");
       },
       error => {
         this.alertify.error(error);
-      });
+      }
+    );
   }
 
-  loggedIn(){
+  loggedIn() {
     const token = localStorage.getItem('token');
-    return !!token; // !! if not null return true else return false
+    return !this.authService.jwtHelper.isTokenExpired(token);
   }
 
-  logout(){
-    localStorage.removeItem('token');
-    this.alertify.message('logged out');
+  logout() {
+    localStorage.removeItem("token");
+    this.alertify.message("logged out");
   }
 }
